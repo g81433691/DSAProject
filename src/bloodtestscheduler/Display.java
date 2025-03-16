@@ -96,7 +96,7 @@ public class Display extends javax.swing.JFrame {
                     .addGroup(HomePNLLayout.createSequentialGroup()
                         .addGap(442, 442, 442)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(343, Short.MAX_VALUE))
+                .addContainerGap(340, Short.MAX_VALUE))
         );
         HomePNLLayout.setVerticalGroup(
             HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,7 +156,7 @@ public class Display extends javax.swing.JFrame {
 
         AppointmentNumberLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         AppointmentNumberLBL.setForeground(new java.awt.Color(255, 255, 255));
-        AppointmentNumberLBL.setText("Appointment number");
+        AppointmentNumberLBL.setText("Appointment no.");
 
         DeleteBTN.setText("Delete");
 
@@ -169,7 +169,6 @@ public class Display extends javax.swing.JFrame {
         ReadBTN.setText("Read");
 
         HospitalCheck.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        HospitalCheck.setForeground(new java.awt.Color(255, 255, 255));
         HospitalCheck.setText("Coming from a hospital ward?");
 
         GPEmailLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -199,9 +198,8 @@ public class Display extends javax.swing.JFrame {
                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                         .addGap(143, 143, 143)
-                        .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
                                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(FirstNameLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(TestTypeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,7 +216,7 @@ public class Display extends javax.swing.JFrame {
                                         .addGap(58, 58, 58)
                                         .addComponent(FirstNameFIeld, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                                .addComponent(AppointmentNumberLBL)
+                                .addComponent(AppointmentNumberLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(AppointmentNumberFormattedField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(220, 220, 220)
@@ -250,7 +248,7 @@ public class Display extends javax.swing.JFrame {
                     .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                         .addGap(458, 458, 458)
                         .addComponent(HomeLBL)))
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         ManageAppointmentsPNLLayout.setVerticalGroup(
             ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,7 +305,7 @@ public class Display extends javax.swing.JFrame {
                 .addGap(65, 65, 65))
         );
 
-        NavigationTabbedPane.addTab("ManageAppointments", ManageAppointmentsPNL);
+        NavigationTabbedPane.addTab("Manage Appointments", ManageAppointmentsPNL);
 
         AppointmentQueue.setBackground(new java.awt.Color(0, 153, 255));
         AppointmentQueue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -350,7 +348,7 @@ public class Display extends javax.swing.JFrame {
                     .addGroup(AppointmentQueueLayout.createSequentialGroup()
                         .addGap(457, 457, 457)
                         .addComponent(AppointmentQueueLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         AppointmentQueueLayout.setVerticalGroup(
             AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,7 +403,7 @@ public class Display extends javax.swing.JFrame {
                     .addGroup(NoShowPNLLayout.createSequentialGroup()
                         .addGap(457, 457, 457)
                         .addComponent(NoShowTrackerLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         NoShowPNLLayout.setVerticalGroup(
             NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
