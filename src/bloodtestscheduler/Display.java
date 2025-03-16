@@ -29,7 +29,7 @@ public class Display extends javax.swing.JFrame {
         BackgroundPNL = new javax.swing.JPanel();
         NavigationTabbedPane = new javax.swing.JTabbedPane();
         HomePNL = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        HomeLBL = new javax.swing.JLabel();
         FirstNameLBL = new javax.swing.JLabel();
         SurnameLBL = new javax.swing.JLabel();
         AgeLBL = new javax.swing.JLabel();
@@ -47,20 +47,22 @@ public class Display extends javax.swing.JFrame {
         SaveBTN = new javax.swing.JButton();
         UpdateBTN = new javax.swing.JButton();
         EmailField = new javax.swing.JTextField();
-        UpdateBTN1 = new javax.swing.JButton();
+        ReadBTN = new javax.swing.JButton();
         HospitalCheck = new javax.swing.JCheckBox();
         GPEmailLBL = new javax.swing.JLabel();
         GPEmailField = new javax.swing.JTextField();
         GPNotesLBL = new javax.swing.JLabel();
-        GPEmailField1 = new javax.swing.JTextField();
-        GPNotesLBL1 = new javax.swing.JLabel();
-        GPEmailField2 = new javax.swing.JTextField();
+        GPNotesField = new javax.swing.JTextField();
+        StatusLBL = new javax.swing.JLabel();
+        StatusComboBox = new javax.swing.JComboBox<>();
         AppointmentQueue = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         AppointmentQueueTBL = new javax.swing.JTable();
-        PopulateTableBTN = new javax.swing.JButton();
         AppointmentQueueLBL = new javax.swing.JLabel();
         NoShowPNL = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        NoShowTrackerTBL = new javax.swing.JTable();
+        NoShowTrackerLBL = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1500, 750));
@@ -71,11 +73,12 @@ public class Display extends javax.swing.JFrame {
         NavigationTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         HomePNL.setBackground(new java.awt.Color(0, 153, 255));
+        HomePNL.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Home");
+        HomeLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        HomeLBL.setForeground(new java.awt.Color(255, 255, 255));
+        HomeLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        HomeLBL.setText("Home");
 
         FirstNameLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         FirstNameLBL.setForeground(new java.awt.Color(255, 255, 255));
@@ -95,12 +98,14 @@ public class Display extends javax.swing.JFrame {
 
         AgeField.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
-        TestTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        TestTypeComboBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        TestTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Complete Blood Count (CBC)", "Lipid Profile", "Liver Function Test", "Thyroid Function Test" }));
 
         TestTypeLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         TestTypeLBL.setForeground(new java.awt.Color(255, 255, 255));
         TestTypeLBL.setText("Test Type");
 
+        PriorityComboBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         PriorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Urgent", "Medium", "Low", " " }));
 
         PriorityLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -123,7 +128,7 @@ public class Display extends javax.swing.JFrame {
 
         EmailField.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
-        UpdateBTN1.setText("Read");
+        ReadBTN.setText("Read");
 
         HospitalCheck.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         HospitalCheck.setForeground(new java.awt.Color(255, 255, 255));
@@ -139,18 +144,14 @@ public class Display extends javax.swing.JFrame {
         GPNotesLBL.setForeground(new java.awt.Color(255, 255, 255));
         GPNotesLBL.setText("GP Notes");
 
-        GPEmailField1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        GPNotesField.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
-        GPNotesLBL1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        GPNotesLBL1.setForeground(new java.awt.Color(255, 255, 255));
-        GPNotesLBL1.setText("GP Clinic name");
+        StatusLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        StatusLBL.setForeground(new java.awt.Color(255, 255, 255));
+        StatusLBL.setText("Status");
 
-        GPEmailField2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        GPEmailField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GPEmailField2ActionPerformed(evt);
-            }
-        });
+        StatusComboBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Upcoming", "Completed", "No-Show", "" }));
 
         javax.swing.GroupLayout HomePNLLayout = new javax.swing.GroupLayout(HomePNL);
         HomePNL.setLayout(HomePNLLayout);
@@ -174,7 +175,7 @@ public class Display extends javax.swing.JFrame {
                                         .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(TestTypeComboBox, 0, 203, Short.MAX_VALUE)
                                             .addComponent(GPEmailField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(GPEmailField1)))
+                                            .addComponent(GPNotesField)))
                                     .addGroup(HomePNLLayout.createSequentialGroup()
                                         .addGap(58, 58, 58)
                                         .addComponent(FirstNameFIeld, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -188,40 +189,39 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(AgeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(SurnameLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PriorityLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(GPNotesLBL1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(StatusLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
                         .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(EmailField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AgeField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(SurnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(PriorityComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(GPEmailField2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(HomePNLLayout.createSequentialGroup()
-                        .addGap(478, 478, 478)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(PriorityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(HomePNLLayout.createSequentialGroup()
                         .addGap(191, 191, 191)
-                        .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(HospitalCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(HomePNLLayout.createSequentialGroup()
-                                .addComponent(SaveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)
-                                .addComponent(DeleteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)
-                                .addComponent(UpdateBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)
-                                .addComponent(UpdateBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(168, Short.MAX_VALUE))
+                        .addComponent(SaveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(DeleteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(UpdateBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(ReadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(HomePNLLayout.createSequentialGroup()
+                        .addGap(201, 201, 201)
+                        .addComponent(HospitalCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(HomePNLLayout.createSequentialGroup()
+                        .addGap(475, 475, 475)
+                        .addComponent(HomeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(166, Short.MAX_VALUE))
         );
         HomePNLLayout.setVerticalGroup(
             HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HomePNLLayout.createSequentialGroup()
                 .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(HomePNLLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
+                        .addGap(20, 20, 20)
+                        .addComponent(HomeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
                         .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AppointmentNumberFormattedField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AppointmentNumberLBL))
@@ -236,7 +236,7 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(TestTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(HomePNLLayout.createSequentialGroup()
-                        .addGap(20, 134, Short.MAX_VALUE)
+                        .addGap(20, 135, Short.MAX_VALUE)
                         .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(EmailField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EmailLBL))
@@ -254,24 +254,25 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(GPEmailLBL))
                         .addGap(18, 18, 18)
                         .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(GPEmailField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(GPNotesLBL1)
-                            .addComponent(GPEmailField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(GPNotesLBL))
-                        .addGap(69, 69, 69)))
+                            .addComponent(StatusLBL)
+                            .addComponent(GPNotesField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GPNotesLBL)
+                            .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(44, 44, 44)))
                 .addComponent(HospitalCheck)
-                .addGap(34, 34, 34)
+                .addGap(59, 59, 59)
                 .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(UpdateBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SaveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UpdateBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ReadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(65, 65, 65))
         );
 
         NavigationTabbedPane.addTab("Home", HomePNL);
 
         AppointmentQueue.setBackground(new java.awt.Color(0, 153, 255));
+        AppointmentQueue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         AppointmentQueueTBL.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -281,11 +282,11 @@ public class Display extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "AppointmentNumber", "First Name", "Surname", "Email", "Test Type", "Age", "Priority", "GP Email", "GP Notes"
+                "AppointmentNumber", "First Name", "Surname", "Email", "Test Type", "Age", "Priority", "GP Email", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -293,11 +294,6 @@ public class Display extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(AppointmentQueueTBL);
-        if (AppointmentQueueTBL.getColumnModel().getColumnCount() > 0) {
-            AppointmentQueueTBL.getColumnModel().getColumn(8).setHeaderValue("GP Notes");
-        }
-
-        PopulateTableBTN.setText("Populate Table");
 
         AppointmentQueueLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         AppointmentQueueLBL.setForeground(new java.awt.Color(255, 255, 255));
@@ -311,44 +307,79 @@ public class Display extends javax.swing.JFrame {
             .addGroup(AppointmentQueueLayout.createSequentialGroup()
                 .addGroup(AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                        .addGap(526, 526, 526)
-                        .addComponent(PopulateTableBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(50, 50, 50)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                        .addGap(465, 465, 465)
+                        .addGap(457, 457, 457)
                         .addComponent(AppointmentQueueLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         AppointmentQueueLayout.setVerticalGroup(
             AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(AppointmentQueueLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PopulateTableBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+                .addGap(58, 58, 58))
         );
 
-        NavigationTabbedPane.addTab("Appointment queue", AppointmentQueue);
+        NavigationTabbedPane.addTab("Appointment Queue", AppointmentQueue);
 
         NoShowPNL.setBackground(new java.awt.Color(0, 153, 255));
+        NoShowPNL.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        NoShowTrackerTBL.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "AppointmentNumber", "First Name", "Surname", "Email", "Test Type", "Age", "Priority", "GP Email", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(NoShowTrackerTBL);
+
+        NoShowTrackerLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        NoShowTrackerLBL.setForeground(new java.awt.Color(255, 255, 255));
+        NoShowTrackerLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NoShowTrackerLBL.setText("No-Show Tracker");
 
         javax.swing.GroupLayout NoShowPNLLayout = new javax.swing.GroupLayout(NoShowPNL);
         NoShowPNL.setLayout(NoShowPNLLayout);
         NoShowPNLLayout.setHorizontalGroup(
             NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1199, Short.MAX_VALUE)
+            .addGroup(NoShowPNLLayout.createSequentialGroup()
+                .addGroup(NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(NoShowPNLLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(NoShowPNLLayout.createSequentialGroup()
+                        .addGap(457, 457, 457)
+                        .addComponent(NoShowTrackerLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         NoShowPNLLayout.setVerticalGroup(
             NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 616, Short.MAX_VALUE)
+            .addGroup(NoShowPNLLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(NoShowTrackerLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
         );
 
-        NavigationTabbedPane.addTab("No Show", NoShowPNL);
+        NavigationTabbedPane.addTab("No Show Tracker", NoShowPNL);
 
         javax.swing.GroupLayout BackgroundPNLLayout = new javax.swing.GroupLayout(BackgroundPNL);
         BackgroundPNL.setLayout(BackgroundPNLLayout);
@@ -382,10 +413,6 @@ public class Display extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void GPEmailField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GPEmailField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_GPEmailField2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -437,26 +464,28 @@ public class Display extends javax.swing.JFrame {
     private javax.swing.JTextField FirstNameFIeld;
     private javax.swing.JLabel FirstNameLBL;
     private javax.swing.JTextField GPEmailField;
-    private javax.swing.JTextField GPEmailField1;
-    private javax.swing.JTextField GPEmailField2;
     private javax.swing.JLabel GPEmailLBL;
+    private javax.swing.JTextField GPNotesField;
     private javax.swing.JLabel GPNotesLBL;
-    private javax.swing.JLabel GPNotesLBL1;
+    private javax.swing.JLabel HomeLBL;
     private javax.swing.JPanel HomePNL;
     private javax.swing.JCheckBox HospitalCheck;
     private javax.swing.JTabbedPane NavigationTabbedPane;
     private javax.swing.JPanel NoShowPNL;
-    private javax.swing.JButton PopulateTableBTN;
+    private javax.swing.JLabel NoShowTrackerLBL;
+    private javax.swing.JTable NoShowTrackerTBL;
     private javax.swing.JComboBox<String> PriorityComboBox;
     private javax.swing.JLabel PriorityLBL;
+    private javax.swing.JButton ReadBTN;
     private javax.swing.JButton SaveBTN;
+    private javax.swing.JComboBox<String> StatusComboBox;
+    private javax.swing.JLabel StatusLBL;
     private javax.swing.JTextField SurnameField;
     private javax.swing.JLabel SurnameLBL;
     private javax.swing.JComboBox<String> TestTypeComboBox;
     private javax.swing.JLabel TestTypeLBL;
     private javax.swing.JButton UpdateBTN;
-    private javax.swing.JButton UpdateBTN1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
