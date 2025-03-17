@@ -4,10 +4,27 @@
  */
 package bloodtestscheduler;
 
+import java.util.Stack;
+
 /**
  *
  * @author gregm
  */
 public class NoShowTracker {
-    
+
+    private Stack<Patient> noShowStack;
+
+    public NoShowTracker() {
+        noShowStack = new Stack<>();
+    }
+
+    public void addNoShow(Patient patient) {
+    }
+
+    public Patient removeNoShow() {
+        return null;
+    }
+
+    public void populateNoShowTable() {
+    }
 }
