@@ -5,22 +5,32 @@
 package bloodtestscheduler;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author gregm
  */
-public class Display extends javax.swing.JFrame {
-   private Appointment appointment;
+public class Display extends javax.swing.JFrame {//my jframe containing my GUI for 
+
+    private StackADT<Patient> noShowerStack;//stack t0 store the appointments/patiens in a stack
+    private PriorityQueueADT pq;//pq in order to store them based on priority
+    private QueueADT fcfsQ;  //q in order to store appointmnet/patients in fcfs functionality
+    private Appointment appointment;//an appoinment obj to acces manage and ahndle all patients/appointments, to acess appoinrment lgoic
+
     /**
      * Creates new form Display
      */
     public Display() {
-        initComponents();
-        this.appointment = new Appointment();  // Correctly initialize the appointment object
-        
+        initComponents(); 
+
+        pq = new PriorityQueueADT(); //make a new pq for handling basede on priority
+        fcfsQ = new QueueADT(); 
+
+        this.appointment = new Appointment(pq, fcfsQ);//init the appointment obj
+
+        noShowerStack = new StackADT<>();  //init the stack so the no show tracker stack will function
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,6 +46,7 @@ public class Display extends javax.swing.JFrame {
         HomePNL = new javax.swing.JPanel();
         LogoLBL = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        ExitBTN = new javax.swing.JLabel();
         ManageAppointmentsPNL = new javax.swing.JPanel();
         HomeLBL = new javax.swing.JLabel();
         FirstNameLBL = new javax.swing.JLabel();
@@ -51,28 +62,20 @@ public class Display extends javax.swing.JFrame {
         EmailLBL = new javax.swing.JLabel();
         AppointmentNumberFormattedField = new javax.swing.JFormattedTextField();
         AppointmentNumberLBL = new javax.swing.JLabel();
-        DeleteBTN = new javax.swing.JButton();
-        SaveBTN = new javax.swing.JButton();
-        UpdateBTN = new javax.swing.JButton();
+        RemoveBTN = new javax.swing.JButton();
+        AddBTN = new javax.swing.JButton();
         EmailField = new javax.swing.JTextField();
-        ReadBTN = new javax.swing.JButton();
-        HospitalCheck = new javax.swing.JCheckBox();
+        HospitalCheckBox = new javax.swing.JCheckBox();
         GPEmailLBL = new javax.swing.JLabel();
         GPEmailField = new javax.swing.JTextField();
         GPNotesLBL = new javax.swing.JLabel();
         GPNotesField = new javax.swing.JTextField();
         StatusLBL = new javax.swing.JLabel();
         StatusComboBox = new javax.swing.JComboBox<>();
-        AppointmentQueue = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        AppointmentQueueTBL = new javax.swing.JTable();
-        AppointmentQueueLBL = new javax.swing.JLabel();
-        PopulateAppointmentTabelBTN = new javax.swing.JButton();
-        NoShowPNL = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        NoShowTrackerTBL = new javax.swing.JTable();
-        NoShowTrackerLBL = new javax.swing.JLabel();
-        PopulateAppointmentTabelBTN1 = new javax.swing.JButton();
+        ViiewAppointmentsPriorityBTN = new javax.swing.JButton();
+        UpcomingBTN1 = new javax.swing.JButton();
+        ViewAppointmentsFCFSBtn = new javax.swing.JButton();
+        ExitBTN1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1500, 750));
@@ -85,6 +88,7 @@ public class Display extends javax.swing.JFrame {
         NavigationTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         NavigationTabbedPane.setAlignmentX(0.8F);
         NavigationTabbedPane.setAlignmentY(0.8F);
+        NavigationTabbedPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         NavigationTabbedPane.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         NavigationTabbedPane.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -101,25 +105,37 @@ public class Display extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Blood Test Scheduler");
 
+        ExitBTN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bloodtestscheduler/img/button.png"))); // NOI18N
+        ExitBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ExitBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ExitBTNMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout HomePNLLayout = new javax.swing.GroupLayout(HomePNL);
         HomePNL.setLayout(HomePNLLayout);
         HomePNLLayout.setHorizontalGroup(
             HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HomePNLLayout.createSequentialGroup()
-                .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(HomePNLLayout.createSequentialGroup()
-                        .addGap(340, 340, 340)
-                        .addComponent(LogoLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(HomePNLLayout.createSequentialGroup()
-                        .addGap(442, 442, 442)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addGap(442, 442, 442)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(453, Short.MAX_VALUE))
+            .addGroup(HomePNLLayout.createSequentialGroup()
+                .addGap(340, 340, 340)
+                .addComponent(LogoLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ExitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         HomePNLLayout.setVerticalGroup(
             HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HomePNLLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(LogoLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(HomePNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(HomePNLLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(LogoLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ExitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -128,6 +144,7 @@ public class Display extends javax.swing.JFrame {
         NavigationTabbedPane.addTab("Home", HomePNL);
 
         ManageAppointmentsPNL.setBackground(new java.awt.Color(0, 153, 255));
+        ManageAppointmentsPNL.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         ManageAppointmentsPNL.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         HomeLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -158,10 +175,10 @@ public class Display extends javax.swing.JFrame {
 
         TestTypeLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         TestTypeLBL.setForeground(new java.awt.Color(255, 255, 255));
-        TestTypeLBL.setText("Test Type");
+        TestTypeLBL.setText("Blood Test Type");
 
         PriorityComboBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        PriorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", " " }));
+        PriorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Urgent", "Medium", "Low" }));
 
         PriorityLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         PriorityLBL.setForeground(new java.awt.Color(255, 255, 255));
@@ -175,23 +192,27 @@ public class Display extends javax.swing.JFrame {
         AppointmentNumberLBL.setForeground(new java.awt.Color(255, 255, 255));
         AppointmentNumberLBL.setText("Appointment no.");
 
-        DeleteBTN.setText("Delete");
-
-        SaveBTN.setText("Save");
-        SaveBTN.addActionListener(new java.awt.event.ActionListener() {
+        RemoveBTN.setText("Remove");
+        RemoveBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        RemoveBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveBTNActionPerformed(evt);
+                RemoveBTNActionPerformed(evt);
             }
         });
 
-        UpdateBTN.setText("Update");
+        AddBTN.setText("Add");
+        AddBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        AddBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddBTNActionPerformed(evt);
+            }
+        });
 
         EmailField.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
-        ReadBTN.setText("Read");
-
-        HospitalCheck.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        HospitalCheck.setText("Coming from a hospital ward?");
+        HospitalCheckBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        HospitalCheckBox.setText("Coming from a hospital ward?");
+        HospitalCheckBox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         GPEmailLBL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         GPEmailLBL.setForeground(new java.awt.Color(255, 255, 255));
@@ -210,7 +231,39 @@ public class Display extends javax.swing.JFrame {
         StatusLBL.setText("Status");
 
         StatusComboBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Upcoming", "Completed", "No-Show", "" }));
+        StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Upcoming", "Completed", "No Show", " " }));
+
+        ViiewAppointmentsPriorityBTN.setText("View appointments (Priority)");
+        ViiewAppointmentsPriorityBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ViiewAppointmentsPriorityBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViiewAppointmentsPriorityBTNActionPerformed(evt);
+            }
+        });
+
+        UpcomingBTN1.setText("Display No-Shows");
+        UpcomingBTN1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        UpcomingBTN1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpcomingBTN1ActionPerformed(evt);
+            }
+        });
+
+        ViewAppointmentsFCFSBtn.setText("View appointments (Queue)");
+        ViewAppointmentsFCFSBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ViewAppointmentsFCFSBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewAppointmentsFCFSBtnActionPerformed(evt);
+            }
+        });
+
+        ExitBTN1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bloodtestscheduler/img/button.png"))); // NOI18N
+        ExitBTN1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ExitBTN1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ExitBTN1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout ManageAppointmentsPNLLayout = new javax.swing.GroupLayout(ManageAppointmentsPNL);
         ManageAppointmentsPNL.setLayout(ManageAppointmentsPNLLayout);
@@ -224,24 +277,24 @@ public class Display extends javax.swing.JFrame {
                             .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(FirstNameLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TestTypeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(GPNotesLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(GPEmailLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(GPEmailLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TestTypeLBL))
                                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                                        .addGap(59, 59, 59)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(FirstNameFIeld, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
+                                        .addGap(35, 35, 35)
                                         .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(TestTypeComboBox, 0, 203, Short.MAX_VALUE)
                                             .addComponent(GPEmailField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(GPNotesField)))
-                                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                                        .addGap(58, 58, 58)
-                                        .addComponent(FirstNameFIeld, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(GPNotesField)))))
                             .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                                 .addComponent(AppointmentNumberLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(AppointmentNumberFormattedField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(220, 220, 220)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(EmailLBL)
                             .addComponent(AgeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,29 +307,40 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(AgeField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(SurnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PriorityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                        .addGap(191, 191, 191)
-                        .addComponent(SaveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(DeleteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(UpdateBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(ReadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addComponent(HospitalCheck))
+                            .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                         .addGap(458, 458, 458)
-                        .addComponent(HomeLBL)))
-                .addContainerGap(125, Short.MAX_VALUE))
+                        .addComponent(HomeLBL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ExitBTN1))
+                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
+                        .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
+                                .addGap(201, 201, 201)
+                                .addComponent(HospitalCheckBox))
+                            .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(AddBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(RemoveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addComponent(ViiewAppointmentsPriorityBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(UpcomingBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(ViewAppointmentsFCFSBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 16, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         ManageAppointmentsPNLLayout.setVerticalGroup(
             ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(HomeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(HomeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ExitBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ManageAppointmentsPNLLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -317,158 +381,18 @@ public class Display extends javax.swing.JFrame {
                             .addComponent(GPNotesLBL)
                             .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(44, 44, 44)))
-                .addComponent(HospitalCheck)
-                .addGap(59, 59, 59)
+                .addComponent(HospitalCheckBox)
+                .addGap(48, 48, 48)
                 .addGroup(ManageAppointmentsPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DeleteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UpdateBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SaveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ReadBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65))
+                    .addComponent(RemoveBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AddBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ViiewAppointmentsPriorityBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UpcomingBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ViewAppointmentsFCFSBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(76, 76, 76))
         );
 
         NavigationTabbedPane.addTab("Manage Appointments", ManageAppointmentsPNL);
-
-        AppointmentQueue.setBackground(new java.awt.Color(0, 153, 255));
-        AppointmentQueue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        AppointmentQueue.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                AppointmentQueueMouseClicked(evt);
-            }
-        });
-
-        AppointmentQueueTBL.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "AppointmentNumber", "First Name", "Surname", "Email", "Test Type", "Age", "Priority", "GP Email", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(AppointmentQueueTBL);
-
-        AppointmentQueueLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        AppointmentQueueLBL.setForeground(new java.awt.Color(255, 255, 255));
-        AppointmentQueueLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        AppointmentQueueLBL.setText("Appointment queue");
-
-        PopulateAppointmentTabelBTN.setText("Populate table");
-        PopulateAppointmentTabelBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PopulateAppointmentTabelBTNActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout AppointmentQueueLayout = new javax.swing.GroupLayout(AppointmentQueue);
-        AppointmentQueue.setLayout(AppointmentQueueLayout);
-        AppointmentQueueLayout.setHorizontalGroup(
-            AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                .addGroup(AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                        .addGap(457, 457, 457)
-                        .addComponent(AppointmentQueueLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AppointmentQueueLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(PopulateAppointmentTabelBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(491, 491, 491))
-        );
-        AppointmentQueueLayout.setVerticalGroup(
-            AppointmentQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AppointmentQueueLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(AppointmentQueueLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(PopulateAppointmentTabelBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
-        );
-
-        NavigationTabbedPane.addTab("Appointment Queue", AppointmentQueue);
-
-        NoShowPNL.setBackground(new java.awt.Color(0, 153, 255));
-        NoShowPNL.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        NoShowTrackerTBL.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "AppointmentNumber", "First Name", "Surname", "Email", "Test Type", "Age", "Priority", "GP Email", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(NoShowTrackerTBL);
-
-        NoShowTrackerLBL.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        NoShowTrackerLBL.setForeground(new java.awt.Color(255, 255, 255));
-        NoShowTrackerLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        NoShowTrackerLBL.setText("No-Show Tracker");
-
-        PopulateAppointmentTabelBTN1.setText("Populate table");
-        PopulateAppointmentTabelBTN1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PopulateAppointmentTabelBTN1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout NoShowPNLLayout = new javax.swing.GroupLayout(NoShowPNL);
-        NoShowPNL.setLayout(NoShowPNLLayout);
-        NoShowPNLLayout.setHorizontalGroup(
-            NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(NoShowPNLLayout.createSequentialGroup()
-                .addGroup(NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(NoShowPNLLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(NoShowPNLLayout.createSequentialGroup()
-                        .addGap(457, 457, 457)
-                        .addComponent(NoShowTrackerLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NoShowPNLLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(PopulateAppointmentTabelBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(491, 491, 491))
-        );
-        NoShowPNLLayout.setVerticalGroup(
-            NoShowPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(NoShowPNLLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(NoShowTrackerLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(PopulateAppointmentTabelBTN1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
-        );
-
-        NavigationTabbedPane.addTab("No Show Tracker", NoShowPNL);
 
         javax.swing.GroupLayout BackgroundPNLLayout = new javax.swing.GroupLayout(BackgroundPNL);
         BackgroundPNL.setLayout(BackgroundPNLLayout);
@@ -476,14 +400,14 @@ public class Display extends javax.swing.JFrame {
             BackgroundPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BackgroundPNLLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(NavigationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addComponent(NavigationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         BackgroundPNLLayout.setVerticalGroup(
             BackgroundPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BackgroundPNLLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(NavigationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NavigationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -503,42 +427,86 @@ public class Display extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SaveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBTNActionPerformed
-    int appointmentNumber = Integer.parseInt(AppointmentNumberFormattedField.getText());
-    String fName = FirstNameFIeld.getText();
-    String surname = SurnameField.getText();
-    String EmailAddress = EmailField.getText();
-    String BloodTestType = (String) TestTypeComboBox.getSelectedItem();
-    int priority = Integer.parseInt((String) PriorityComboBox.getSelectedItem());
-    String gpEmailAddress = GPEmailField.getText();
-    String gpNotes = GPNotesField.getText();
-    String AppointmentStatus = (String) StatusComboBox.getSelectedItem();
-    int age = Integer.parseInt(AgeField.getText());
-    
-            Patient patient = new Patient(appointmentNumber, fName, surname, EmailAddress, BloodTestType, 
-                                  priority, gpEmailAddress, gpNotes, AppointmentStatus, age);
-    
-    
-    appointment.saveAppointment(priority, patient);
-    
-    JOptionPane.showMessageDialog(this, "Appointment saved successfully!");
-    }//GEN-LAST:event_SaveBTNActionPerformed
-
     private void NavigationTabbedPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NavigationTabbedPaneMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_NavigationTabbedPaneMouseClicked
 
-    private void AppointmentQueueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AppointmentQueueMouseClicked
+    private void ViiewAppointmentsPriorityBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViiewAppointmentsPriorityBTNActionPerformed
+     String Cont = pq.printPQueue();//xall upon the displayQueue dunction
+    JOptionPane.showMessageDialog(this, Cont, "Priority Scheduled Appointments * FROM BOTTOM TO TOP - PRIORITY *", JOptionPane.INFORMATION_MESSAGE);//peint out the patients appointments into a joption pane
+    }//GEN-LAST:event_ViiewAppointmentsPriorityBTNActionPerformed
 
-    }//GEN-LAST:event_AppointmentQueueMouseClicked
+    private void AddBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBTNActionPerformed
+        int appointmentNumber = Integer.parseInt(AppointmentNumberFormattedField.getText());//get the text the end user has entered into the fields
+        String fName = FirstNameFIeld.getText();//get the text the end user has entered into the fields
+        String surname = SurnameField.getText();//get the text the end user has entered into the fields
+        String emailAddress = EmailField.getText();//get the text the end user has entered into the fields
+        String bloodTestType = (String) TestTypeComboBox.getSelectedItem();//get the text the end user has entered into the fields
+        String selectedPriority = (String) PriorityComboBox.getSelectedItem();//get the text the end user has entered into the fields
+        int priorityNum;//get the text the end user has entered into the fields
 
-    private void PopulateAppointmentTabelBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopulateAppointmentTabelBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PopulateAppointmentTabelBTNActionPerformed
+        if ("Urgent".equals(selectedPriority)) {//if statement to convert the string choice to integers so we cna add it based on priority
+            priorityNum = 1;//set to highest
+        } else if ("Medium".equals(selectedPriority)) {//if mediu, is chosen
+            priorityNum = 2;//set to medium
+        } else if ("Low".equals(selectedPriority)) {//if low is chosen
+            priorityNum = 3;//set to 3
+        } else {//if none of the above happen
+            priorityNum = 4;//set to 4
+        }//end else
 
-    private void PopulateAppointmentTabelBTN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopulateAppointmentTabelBTN1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PopulateAppointmentTabelBTN1ActionPerformed
+        String gpEmailAddress = GPEmailField.getText();//get the text the end user has entered into the fields
+        String gpNotes = GPNotesField.getText();//get the text the end user has entered into the fields
+        String appointmentStatus = (String) StatusComboBox.getSelectedItem();//get the text the end user has entered into the fields
+        int age = Integer.parseInt(AgeField.getText());//get the text the end user has entered into the fields
+
+        if (age > 50) {//add in additonal logic if age exceeds 50 move them to the highest peiority in the queue
+            priorityNum = 1;//which is setting the priority num to 1
+        }//end if
+
+        if (HospitalCheckBox.isSelected()) {//if the "im coming from a hospital eard checkbox is ticked
+            priorityNum = 1;//set to highest priority immeditaley regardless oif they put low priority
+        }
+        Patient patient = new Patient(appointmentNumber, fName, surname, emailAddress,bloodTestType, priorityNum, gpEmailAddress,gpNotes, appointmentStatus, age);//use all the data gathered from the fields inputted by the end iser and save it to a patient obj
+
+        appointment.saveAppointment(priorityNum, patient);//now send the patient and the priority num to the save appointment method and thats were itll be added to both queues
+
+        if ("No Show".equals(patient.getAppointmentStatus())) {//logic in order to add to no show stack
+            noShowerStack.push(patient);//push them to the no shower stack thats used to track patients who dont show up
+            System.out.println("a no shower has been added to the stack");//
+        }
+
+        JOptionPane.showMessageDialog(this, "Appointment saved succeful !!");//joptionpane to notify the end user
+    }//GEN-LAST:event_AddBTNActionPerformed
+
+    private void RemoveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveBTNActionPerformed
+if (pq.isEmpty() || fcfsQ.isEmpty()) {//if the pq is empty and the q good measure to check both 
+    JOptionPane.showMessageDialog(null, "Queue empty. No appoinment to remove.", "Empty", JOptionPane.INFORMATION_MESSAGE);
+} else {//else
+    appointment.deleteAppointment();//call upon the delete appointment method in the appointment class
+    System.out.println("Appointment deleted.");
+}
+
+        
+    }//GEN-LAST:event_RemoveBTNActionPerformed
+
+    private void UpcomingBTN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpcomingBTN1ActionPerformed
+        String cont = noShowerStack.displayStack();//c\ll upon the displayQueue dunction
+        JOptionPane.showMessageDialog(this, cont, "No-Showers", JOptionPane.INFORMATION_MESSAGE);//peint out the patients appointments into a joption pane
+    }//GEN-LAST:event_UpcomingBTN1ActionPerformed
+
+    private void ViewAppointmentsFCFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewAppointmentsFCFSBtnActionPerformed
+    String cont = fcfsQ.displayQueue();//c\ll upon the displayQueue dunction
+    JOptionPane.showMessageDialog(this, cont, "FCFS Scheduled *From top to bottom*", JOptionPane.INFORMATION_MESSAGE);//peint out the patients appointments into a joption pane
+    }//GEN-LAST:event_ViewAppointmentsFCFSBtnActionPerformed
+
+    private void ExitBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitBTNMouseClicked
+System.exit(0); 
+    }//GEN-LAST:event_ExitBTNMouseClicked
+
+    private void ExitBTN1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitBTN1MouseClicked
+System.exit(0); 
+    }//GEN-LAST:event_ExitBTN1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -576,17 +544,16 @@ public class Display extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddBTN;
     private javax.swing.JTextField AgeField;
     private javax.swing.JLabel AgeLBL;
     private javax.swing.JFormattedTextField AppointmentNumberFormattedField;
     private javax.swing.JLabel AppointmentNumberLBL;
-    private javax.swing.JPanel AppointmentQueue;
-    private javax.swing.JLabel AppointmentQueueLBL;
-    public static javax.swing.JTable AppointmentQueueTBL;
     private javax.swing.JPanel BackgroundPNL;
-    private javax.swing.JButton DeleteBTN;
     private javax.swing.JTextField EmailField;
     private javax.swing.JLabel EmailLBL;
+    private javax.swing.JLabel ExitBTN;
+    private javax.swing.JLabel ExitBTN1;
     private javax.swing.JTextField FirstNameFIeld;
     private javax.swing.JLabel FirstNameLBL;
     private javax.swing.JTextField GPEmailField;
@@ -595,28 +562,22 @@ public class Display extends javax.swing.JFrame {
     private javax.swing.JLabel GPNotesLBL;
     private javax.swing.JLabel HomeLBL;
     private javax.swing.JPanel HomePNL;
-    private javax.swing.JCheckBox HospitalCheck;
+    private javax.swing.JCheckBox HospitalCheckBox;
     private javax.swing.JLabel LogoLBL;
     private javax.swing.JPanel ManageAppointmentsPNL;
     private javax.swing.JTabbedPane NavigationTabbedPane;
-    private javax.swing.JPanel NoShowPNL;
-    private javax.swing.JLabel NoShowTrackerLBL;
-    private javax.swing.JTable NoShowTrackerTBL;
-    private javax.swing.JButton PopulateAppointmentTabelBTN;
-    private javax.swing.JButton PopulateAppointmentTabelBTN1;
     private javax.swing.JComboBox<String> PriorityComboBox;
     private javax.swing.JLabel PriorityLBL;
-    private javax.swing.JButton ReadBTN;
-    private javax.swing.JButton SaveBTN;
+    private javax.swing.JButton RemoveBTN;
     private javax.swing.JComboBox<String> StatusComboBox;
     private javax.swing.JLabel StatusLBL;
     private javax.swing.JTextField SurnameField;
     private javax.swing.JLabel SurnameLBL;
     private javax.swing.JComboBox<String> TestTypeComboBox;
     private javax.swing.JLabel TestTypeLBL;
-    private javax.swing.JButton UpdateBTN;
+    private javax.swing.JButton UpcomingBTN1;
+    private javax.swing.JButton ViewAppointmentsFCFSBtn;
+    private javax.swing.JButton ViiewAppointmentsPriorityBTN;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

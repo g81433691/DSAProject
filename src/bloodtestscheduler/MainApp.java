@@ -9,10 +9,8 @@ package bloodtestscheduler;
  * @author gregm
  */
 public class MainApp {
-
-    public static void main(String[] args) {
-        Display display = new Display();
-        display.setVisible(true);
-
-    }
-}
+    public static void main(String[] args) {//start main
+        Display display = new Display();//just kick things off and create an instance of our gui
+        display.setVisible(true);//ensure its visible to the end user
+    }//end main
+}//end class

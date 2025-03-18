@@ -8,46 +8,46 @@ package bloodtestscheduler;
  *
  * @author gregm
  */
-public class Patient implements Comparable<Patient> {
+public class Patient implements Comparable<Patient> {//patient class holds and declares all the needed variables and methods to let you compare patients based on priority
 
-    private int appointmentNumber;
-    private String fName;
-    private String surname;
-    private String emailAddress;
-    private String bloodTestType;
-    private int priority;
-    private String gpEmailAddress;
-    private String gpNotes;
-    private String appointmentStatus;
-    private int age;
+    private int appointmentNum;//var to hold onto the appointment number added
+    private String Firstname;//var to hold onto the appointment number added
+    private String surname;//var to hold onto the asurname added
+    private String Email;//var to hold onto the email added
+    private String bloodTestType;//var to hold onto theblood test type added
+    private int priorityNum;////var to hold onto the priority number added
+    private String gpEmailAddress;//var to hold onto the gp email address added
+    private String gpNotes;//var to hold onto the gp notes added
+    private String appointmentStatus;//var to hold onto the appointment statu
+    private int age;////var to hold onto the \ge added
 
-    public Patient(int appointmentNumber, String fName, String surname, String emailAddress, String bloodTestType, int priority, String gpEmailAddress, String gpNotes, String appointmentStatus, int age) {
-        this.appointmentNumber = appointmentNumber;
-        this.fName = fName;
+    public Patient(int appointmentNum, String Firstname, String surname, String Email,String bloodTestType, int priorityNum, String gpEmailAddress, String gpNotes, String appointmentStatus, int age) {//constructore for patient obj in order to save the corresponding data
+        this.appointmentNum = appointmentNum;
+        this.Firstname = Firstname;
         this.surname = surname;
-        this.emailAddress = emailAddress;
+        this.Email = Email;
         this.bloodTestType = bloodTestType;
-        this.priority = priority;
+        this.priorityNum = priorityNum;
         this.gpEmailAddress = gpEmailAddress;
         this.gpNotes = gpNotes;
         this.appointmentStatus = appointmentStatus;
         this.age = age;
     }
 
-    public int getAppointmentNumber() {
-        return appointmentNumber;
+    public int getAppointmentNumber() {//getters and setters auto generated via nebeans
+        return appointmentNum;
     }
 
-    public void setAppointmentNumber(int appointmentNumber) {
-        this.appointmentNumber = appointmentNumber;
+    public void setAppointmentNumber(int appointmentNum) {
+        this.appointmentNum = appointmentNum;
     }
 
     public String getfName() {
-        return fName;
+        return Firstname;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setfName(String Firstname) {
+        this.Firstname = Firstname;
     }
 
     public String getSurname() {
@@ -59,11 +59,11 @@ public class Patient implements Comparable<Patient> {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return Email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmailAddress(String Email) {
+        this.Email = Email;
     }
 
     public String getBloodTestType() {
@@ -75,11 +75,11 @@ public class Patient implements Comparable<Patient> {
     }
 
     public int getPriority() {
-        return priority;
+        return priorityNum;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setPriority(int priorityNum) {
+        this.priorityNum = priorityNum;
     }
 
     public String getGpEmailAddress() {
@@ -115,8 +115,15 @@ public class Patient implements Comparable<Patient> {
     }
 
     @Override
-    public int compareTo(Patient o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String toString() {//toString auto generated via netbeans
+        return "Patient{" + "appointmentNum=" + appointmentNum + ", Firstname=" + Firstname + ", surname=" + surname
+                + ", Email=" + Email + ", bloodTestType=" + bloodTestType + ", priorityNum=" + priorityNum
+                + ", gpEmailAddress=" + gpEmailAddress + ", gpNotes=" + gpNotes + ", appointmentStatus=" + appointmentStatus
+                + ", age=" + age + '}';
     }
 
-}
+    @Override
+    public int compareTo(Patient o) {//compare to method is used
+        return Integer.compare(this.priorityNum, o.priorityNum);//compares this patients priority num eith another for sorting 
+    }//end
+}//end
